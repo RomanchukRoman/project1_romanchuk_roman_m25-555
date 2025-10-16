@@ -1,6 +1,6 @@
 install:
 	poetry install
-run:
+project:
 	poetry run project
 build:
 	poetry build
@@ -8,3 +8,5 @@ publish:
 	poetry publish --dry-run
 package-install:
 	python3 -m pip install dist/*.whl
+make lint:
+	poetry run ruff check .
