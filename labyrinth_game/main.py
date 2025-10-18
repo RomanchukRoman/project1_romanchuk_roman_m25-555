@@ -53,6 +53,8 @@ def process_command(game_state, command):
                 player_actions.take_item(game_state, item_name)
         case 'inventory':
             player_actions.show_inventory(game_state)
+        case 'solve':
+            utils.solve_puzzle(game_state)
         case 'quit':
             print('\nВыход из игры.')
             game_state['game_over'] = True

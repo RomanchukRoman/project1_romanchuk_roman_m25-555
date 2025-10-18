@@ -1,6 +1,7 @@
 # labyrinth_game/utils.py
 
 from labyrinth_game.constants import ROOMS
+from labyrinth_game import player_actions
 
 def describe_current_room(game_state):
     '''
@@ -28,3 +29,44 @@ def describe_current_room(game_state):
     print(f"Выходы: {', '.join(exits.keys())}")
     if puzzle:
         print('Кажется, здесь есть загадка (используйте команду solve).')
+
+def solve_puzzle(game_state):
+    """
+    Функция решения загадок. 
+    Сначала проверьте, есть ли загадка в текущей комнате. Если нет, выведите сообщение "Загадок здесь нет." и завершите выполнение функции.
+    Если загадка есть, выведите на экран вопрос.
+    Получите ответ от пользователя("Ваш ответ: ").
+    Сравните ответ пользователя с правильным ответом.
+    Если ответ верный:
+    Сообщите игроку об успехе.
+    Уберите загадку из комнаты, чтобы ее нельзя было решить дважды.
+    Добавьте игроку награду.
+    Если ответ неверный, сообщите об этом игроку("Неверно. Попробуйте снова.").
+    """
+    room = game_state['current_room']
+    room_data = ROOMS[room]
+    puzzle = room_data['puzzle']
+
+    if not puzzle:
+        print("Загадок здесь нет.")
+        return
+
+    question, correct_answer = puzzle
+    print(f"Загадка: {question}")
+
+    # Получаем ответ от игрока
+    answer = player_actions.get_input()
+
+    # Сравниваем ответ
+    if answer == correct_answer:
+        print("Правильно! Вы успешно решили загадку.")
+        # Убираем загадку из комнаты
+        room_data['puzzle'] = None
+
+        # Добавляем награду 
+        reward = 'candy'
+        if reward not in game_state['player_inventory']:
+            game_state['player_inventory'].append(reward)
+            print(f"Вы получили {reward}!")
+    else:
+        print("Неверно. Попробуйте снова.")
