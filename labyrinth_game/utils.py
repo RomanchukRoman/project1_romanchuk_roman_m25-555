@@ -28,4 +28,3 @@ def describe_current_room(game_state):
     print(f"Выходы: {', '.join(exits.keys())}")
     if puzzle:
         print('Кажется, здесь есть загадка (используйте команду solve).')
-    print('\n')

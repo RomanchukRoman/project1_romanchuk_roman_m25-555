@@ -49,4 +49,52 @@ def move_player(game_state, direction):
 
         utils.describe_current_room(game_state)
     else: 
-        print('Нельзя пойти в этом направлении.')
+        print('\nНельзя пойти в этом направлении.')
+
+def take_item(game_state, item_name):
+    '''
+    Функция взятия предмета.
+    Она должна принимать два аргумента — game_state и название предмета.
+    Проверяет, есть ли предмет в комнате.
+    Если предмет есть:
+    Добавьте его в инвентарь игрока.
+    Удалите его из списка предметов комнаты.
+    Напечатайте сообщение о том, что игрок подобрал предмет("Вы подняли:").
+    Если такого предмета в комнате нет, выведите сообщение: "Такого предмета здесь нет."
+    '''
+    room = game_state['current_room']
+    room_data = ROOMS[game_state['current_room']]
+    items = room_data['items']
+
+    if item_name in items:
+        game_state['player_inventory'].append(item_name)
+        items.remove(item_name)
+        print(f'\nВы подняли: {item_name}')
+    else:
+        print('\nТакого предмета здесь нет.')
+
+def use_item(game_state, item_name):
+    '''
+    Юзаем предметы. Функция должна проверять, есть ли предмет у игрока, и выполнять уникальное действие для каждого предмета:
+    Добавьте проверку на наличие предмета в инвенторе. Если как такого нет, то выведете сообщение(У вас нет такого предмета.)
+    torch: выводит сообщение о том, что стало светлее.
+    sword: выводит сообщение об уверенности.
+    bronze box: выводит сообщение об открытии шкатулки и добавляет 'rusty_key' в инвентарь, если его еще нет в инвенторе, иначе пусто.
+    Для остальных предметов выводите сообщение, что игрок не знает, как их использовать.
+    '''
+    items = game_state['player_inventory']
+
+    if item_name in items:
+        match item_name:
+            case 'torch':
+                print('\nСтало светлее.')
+            case 'sword':
+                print('\nСтало увереннее.')
+            case 'bronze box':
+                print('\nШкатулка открыта.')
+                if not 'rusty_key' in items:
+                    items.append('rusty_key')
+            case _:
+                print('\nИгрок не знает, как это использовать')
+    else:
+        print('\nУ вас нет такого предмета.')

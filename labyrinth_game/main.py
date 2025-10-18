@@ -40,20 +40,24 @@ def process_command(game_state, command):
         case 'look':
             utils.describe_current_room(game_state)
         case 'use':
-            print('use')
+            if arg:
+                item_name = arg[0]
+                player_actions.use_item(game_state, item_name)
         case 'go':
             if arg:
                 direction = arg[0]
                 player_actions.move_player(game_state, direction)
         case 'take':
-            print('take')
+            if arg:
+                item_name = arg[0]
+                player_actions.take_item(game_state, item_name)
         case 'inventory':
             player_actions.show_inventory(game_state)
         case 'quit':
-            print('\nВыход из игры.\n')
+            print('\nВыход из игры.')
             game_state['game_over'] = True
         case 'exit':
-            print('\nВыход из игры.\n')
+            print('\nВыход из игры.')
             game_state['game_over'] = True
 
 if __name__ == '__main__':
