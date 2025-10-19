@@ -31,12 +31,15 @@ def process_command(game_state, command):
     Вызовите соответствующую функцию (describe_current_room, move_player, take_item и т.д.) в рамках условия, передав ей нужный аргумент.
     В цикле while в функции main() вызывайте process_command для каждой введенной пользователем строки. Убедитесь, что команда quit или exit завершает игру.
     '''
+    room = game_state['current_room']
     parts = command.split()
     # первое слово — команда
     action = parts[0]
     arg = parts[1:]
 
     match action:
+        case 'help':
+            utils.show_help()
         case 'look':
             utils.describe_current_room(game_state)
         case 'use':
@@ -54,7 +57,10 @@ def process_command(game_state, command):
         case 'inventory':
             player_actions.show_inventory(game_state)
         case 'solve':
-            utils.solve_puzzle(game_state)
+            if room == 'treasure_room':
+                utils.attempt_open_treasure(game_state)
+            else:
+                utils.solve_puzzle(game_state)
         case 'quit':
             print('\nВыход из игры.')
             game_state['game_over'] = True

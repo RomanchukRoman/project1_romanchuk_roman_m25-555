@@ -27,7 +27,7 @@ ROOMS = {
     },
         'armory': {
           'description': 'Старая оружейная комната. На стене висит меч, рядом — небольшая бронзовая шкатулка.',
-          'exits': {'south': 'library'},
+          'exits': {'south': 'library', 'down': 'underground_passage'},
           'items': ['sword', 'bronze_box'],
           'puzzle': None
     },
@@ -36,6 +36,17 @@ ROOMS = {
           'exits': {'south': 'hall'},
           'items': ['treasure_chest'],
           'puzzle': ('Дверь защищена кодом. Введите код (подсказка: это число пятикратного шага, 2*5= ? )', '10')
+    },
+    'underground_passage': {
+        'description': 'Узкий подземный туннель с влажными стенами. Впереди виден слабый свет.',
+        'exits': {'up': 'armory', 'east': 'secret_chamber'},
+        'items': [],
+        'puzzle': ('На стене надпись: "Назови противоположное слову тьма." (одно слово)', 'свет')
+    },
+    'secret_chamber': {
+        'description': 'Скрытая комната, украшенная древними символами. На алтаре лежит старинный ключ с гравировкой сокровищницы.',
+        'exits': {'west': 'underground_passage'},
+        'items': ['treasure_key'],
+        'puzzle': None
     }
-    # ... добавьте сюда остальные комнаты
 }

@@ -47,26 +47,91 @@ def solve_puzzle(game_state):
     room_data = ROOMS[room]
     puzzle = room_data['puzzle']
 
+
     if not puzzle:
-        print("Загадок здесь нет.")
+        print("\nЗагадок здесь нет.")
         return
 
     question, correct_answer = puzzle
-    print(f"Загадка: {question}")
+    print(f"\nЗагадка: {question}")
 
-    # Получаем ответ от игрока
-    answer = player_actions.get_input()
+    # Внутренний цикл, нужен при неверных ответах, чтобы не выходило в основной игровой цикл
+    while True:
+        # Получаем ответ от игрока
+        answer = player_actions.get_input()
 
-    # Сравниваем ответ
-    if answer == correct_answer:
-        print("Правильно! Вы успешно решили загадку.")
-        # Убираем загадку из комнаты
-        room_data['puzzle'] = None
+        if answer in ("quit", "exit"):
+            print("\nВы решили прекратить попытки.")
+            return
 
-        # Добавляем награду 
-        reward = 'candy'
-        if reward not in game_state['player_inventory']:
-            game_state['player_inventory'].append(reward)
-            print(f"Вы получили {reward}!")
+        # Сравниваем ответ
+        if answer == correct_answer and room != 'treasure_room':
+            print("\nПравильно! Вы успешно решили загадку.")
+            # Убираем загадку из комнаты
+            room_data['puzzle'] = None
+
+            # Добавляем награду для всех комнат, кроме 'treasure_room'
+            reward = 'candy'
+            if room != 'treasure_room':
+                game_state['player_inventory'].append(reward)
+                print(f"\nВы получили {reward}!")
+                # выход из цикла после успеха
+                break  
+        elif answer == correct_answer and room == 'treasure_room':
+            print('\nВ сундуке сокровище! Вы победили!')
+            game_state['game_over'] = True
+            break
+
+        else:
+            print("\nНеверно. Попробуйте снова.")
+
+
+def attempt_open_treasure(game_state):
+    '''
+    Условие победы. Доработайте логику, чтобы игра завершалась победой.
+    Определите условие победы. Основное условие: игрок должен использовать treasure_key на treasure_chest в комнате treasure_room.
+    Также возможен случай когда пользователь может попытаться взломать treasure_chest, решив загадку.
+    Создайте в utils.py функцию attempt_open_treasure(game_state), которая будет реализовывать логику победы.
+    Сценарии, которые нужно учесть в функции:
+    Проверка ключа: Проверьте, есть ли у игрока в инвентаре 'treasure_key'.
+   
+    Если ключ есть, выведите сообщение об успешном открытии замка "Вы применяете ключ, и замок щёлкает. Сундук открыт!", удалите 'treasure_chest' из предметов комнаты, сообщите игроку о победе "В сундуке сокровище! Вы победили!" и установите глобальную переменную game_over в True.
+    Предложение ввести код: Если ключа в инвентаре нет, сундук все еще можно открыть кодом.
+   
+    Спросите у игрока, хочет ли он попробовать ввести код (например, "Сундук заперт. ... Ввести код? (да/нет)").
+    Если игрок отвечает "да", запросите у него код.
+    Сравните введенный код с правильным ответом из puzzle для текущей комнаты.
+    Если код верный, выведите сообщение об успехе, удалите сундук, объявите о победе и установите game_over в True.
+    Если код неверный, сообщите об ошибке.
+    Если игрок изначально отказался вводить код, выведите сообщение "Вы отступаете от сундука.".
+    Если игрок пытается поднять или взять в инвентарь(команда take) 'treasure_chest', то выведите сообщение "Вы не можете поднять сундук, он слишком тяжелый."
+    '''
+    room = game_state['current_room']
+    room_data = ROOMS[room]
+    items = room_data['items']
+    inventory = game_state['player_inventory']
+
+    if 'treasure_key' in inventory:
+        print('\nВы применяете ключ, и замок щёлкает. Сундук открыт!')
+        items.remove('treasure_chest')
+        print('\nВ сундуке сокровище! Вы победили!')
+        game_state['game_over'] = True
     else:
-        print("Неверно. Попробуйте снова.")
+        print('Сундук заперт. ... Ввести код? (да/нет)')
+        # Получаем ответ от игрока
+        answer = player_actions.get_input()
+        if answer == 'да':
+            solve_puzzle(game_state)
+        elif answer == 'нет':
+            print('Вы отступаете от сундука.')
+
+def show_help():
+    print("\nДоступные команды:")
+    print("  go <direction>  - перейти в направлении (north/south/east/west/up/down)")
+    print("  look            - осмотреть текущую комнату")
+    print("  take <item>     - поднять предмет")
+    print("  use <item>      - использовать предмет из инвентаря")
+    print("  inventory       - показать инвентарь")
+    print("  solve           - попытаться решить загадку в комнате")
+    print("  quit            - выйти из игры")
+    print("  help            - показать это сообщение") 
