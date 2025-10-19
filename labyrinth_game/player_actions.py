@@ -1,5 +1,4 @@
 # labyrinth_game/player_actions.py
-
 from labyrinth_game.constants import ROOMS
 from labyrinth_game import utils
 
@@ -40,11 +39,11 @@ def move_player(game_state, direction):
     Если выхода нет, выведите на экран сообщение: "Нельзя пойти в этом направлении."
     '''
     room = game_state['current_room']
-    room_data = ROOMS[game_state['current_room']]
+    room_data = ROOMS[room]
     exits = room_data['exits']
 
     if direction in exits.keys():
-        game_state['current_room'] = exits[direction]
+        room = exits[direction]
         game_state['steps_taken'] += 1
 
         utils.describe_current_room(game_state)
@@ -63,7 +62,7 @@ def take_item(game_state, item_name):
     Если такого предмета в комнате нет, выведите сообщение: "Такого предмета здесь нет."
     '''
     room = game_state['current_room']
-    room_data = ROOMS[game_state['current_room']]
+    room_data = ROOMS[room]
     items = room_data['items']
 
     if item_name in items:

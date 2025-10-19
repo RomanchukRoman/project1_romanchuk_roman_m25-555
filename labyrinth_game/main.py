@@ -1,6 +1,4 @@
 #!/usr/bin/env python3
-
-from labyrinth_game.constants import ROOMS
 from labyrinth_game import player_actions, utils
 
 game_state = {
@@ -20,7 +18,6 @@ def main():
         # Вызов функции пользовательского ввода команды 
         command = player_actions.get_input()
         process_command(game_state, command)
-
 
 def process_command(game_state, command):
     '''

@@ -1,5 +1,4 @@
 # labyrinth_game/utils.py
-
 from labyrinth_game.constants import ROOMS
 from labyrinth_game import player_actions
 
@@ -16,7 +15,7 @@ def describe_current_room(game_state):
     Сообщение о наличии загадки, если она есть("Кажется, здесь есть загадка (используйте команду solve).")
     '''
     room = game_state['current_room']
-    room_data = ROOMS[game_state['current_room']]
+    room_data = ROOMS[room]
     description = room_data['description']
     items = room_data['items']
     exits = room_data['exits']

@@ -1,5 +1,4 @@
 # labyrinth_game/constants.py
-
 ROOMS = {
     'entrance': {
         'description': 'Вы в темном входе лабиринта. Стены покрыты мхом. На полу лежит старый факел.',
