@@ -43,7 +43,7 @@ def move_player(game_state, direction):
     exits = room_data['exits']
 
     if direction in exits.keys():
-        room = exits[direction]
+        game_state['current_room'] = exits[direction]
         game_state['steps_taken'] += 1
 
         utils.describe_current_room(game_state)
